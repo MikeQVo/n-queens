@@ -62,7 +62,7 @@
     },
 
 
-/*
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
@@ -94,11 +94,11 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      for (var i = 0; i < this.length; i++) {
-        if (hasRowConflictAt(this[i])) {
+      for (var rows in this.attributes) {
+        if (this.hasRowConflictAt(this.attributes[rows]) && rows !== 'n') {
           return true;
-        }
-      }      
+        }      
+      }
       return false;
     },
 
