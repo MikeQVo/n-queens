@@ -16,31 +16,38 @@
 
 
 window.findNRooksSolution = function(n) {
-  debugger;
+
   var newBoard = new Board({ n: n });
-  var solution = Object.values(newBoard.attributes).slice(0, -1); 
-  
+  var solution = Object.values(newBoard.attributes).slice(0, -1);
+
   var numberOfRooks = n;
 
-  var playRooks = function(rooksLeft, array) {
-    if (rooksLeft === 0) {
-      return array;
-    }
+  var solutionMaker = function(rooksLeft, array) {
     for (var row = 0; row < array.length; row++) {
       for (var col = 0; col < array[row].length; col++) {
-        if (!this.hasRowConflictAt(row) && !this.hasAnyColConflicts()) {
-          array[row][col] = 1;
-          playRooks(rooksLeft - 1, array);
-        } else {
-          return false; 
+        debugger;
+
+        if (array[row][col] !== 1 && !playRooks(array, [row, col])) {
+          rooksLeft--;
+          if (rooksLeft === 0) {
+            return array;
+          }
         }
       }
     }
+  }
 
-    return array = solution[0];
+  var playRooks = function(array, moveToMake){
+    array[moveToMake[0]][moveToMake[1]] = 1;
+    if(!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()){
+      return false; //there is no conflict
+    } else {
+      array[moveToMake[0]][moveToMake[1]] = 0;
+      return true;//there IS a conflict
+    }
     // console.log('array BEFORE solution', array);
-  }; 
-  solution = playRooks(numberOfRooks, []);
+  };
+  solution = solutionMaker(numberOfRooks, Object.values(newBoard.attributes).slice(0, -1));
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   console.log(solution);
   return solution;

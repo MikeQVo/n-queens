@@ -94,10 +94,12 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      for (var rows in this.attributes) {
-        if (this.hasRowConflictAt(this.attributes[rows]) && rows !== 'n') {
+      var curBoard = Object.values(this.attributes).slice(0,-1);
+
+      for (var rows = 0; rows < curBoard.length; rows++) {
+        if (this.hasRowConflictAt(curBoard[rows])) {
           return true;
-        }      
+        }
       }
       return false;
     },
@@ -118,23 +120,25 @@
       if (counter > 1) {
         return true;
       }
-      return false; 
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
       var tempCol = [];
-      for (var i = 0; i < this.attributes[0].length; i++) {
-        for (var rows in this.attributes) {
+      var curBoard = Object.values(this.attributes).slice(0,-1);
+
+      for (var i = 0; i < curBoard[0].length; i++) { //represents columns
+        for (var rows = 0; rows < curBoard.length; rows++) {
           tempCol.push(this.attributes[rows][i]);
         }
         if (this.hasColConflictAt(tempCol)) {
           return true; // saying the column has conflicts
         } else {
           tempCol = [];
-        } 
+        }
       }
-      return false; 
+      return false;
     },
 
 
@@ -153,7 +157,7 @@
       if (counter > 1) {
         return true;
       }
-      return false; 
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -179,8 +183,8 @@
             }
           }
         }
-      }   
-      return false; 
+      }
+      return false;
     },
 
 
@@ -225,7 +229,7 @@
             }
           }
         }
-      }   
+      }
       return false; // fixme
     }
 
