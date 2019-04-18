@@ -15,17 +15,19 @@
 
 
 
-window.findNRooksSolution = function(n) {
-
-  var newBoard = new Board({ n: n });
-  var solution = Object.values(newBoard.attributes).slice(0, -1);
+window.findNRooksSolution = function(n, presetBoard) {
+  if(presetBoard === undefined) {
+    var newBoard = new Board({ n: n });
+    var solution = Object.values(newBoard.attributes).slice(0, -1);
+  } else {
+    var solution = presetBoard;
+  };
 
   var numberOfRooks = n;
 
   var solutionMaker = function(rooksLeft, array) {
     for (var row = 0; row < array.length; row++) {
       for (var col = 0; col < array[row].length; col++) {
-        debugger;
 
         if (array[row][col] !== 1 && !playRooks(array, [row, col])) {
           rooksLeft--;
@@ -47,16 +49,27 @@ window.findNRooksSolution = function(n) {
     }
     // console.log('array BEFORE solution', array);
   };
-  solution = solutionMaker(numberOfRooks, Object.values(newBoard.attributes).slice(0, -1));
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  console.log(solution);
+  solution = solutionMaker(numberOfRooks, solution);
+  // console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutions = []; // no solutions being pushed correctly
+  var solutionCount = 0;
+  var newBoard = new Board({ n: n });
+  var board = Object.values(newBoard.attributes).slice(0, -1);
 
+  for (var i = 0; i < board[0].length; i++) { //error somewhere in the following FIX THIS
+    board[0][i] = 1;
+    console.log(board);
+    solutions.push(findNRooksSolution(n - 1, board));
+    board[0][i] = 0;
+    solutionCount = solutions.length;
+  }
+
+  console.log('solutions', solutions);
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
